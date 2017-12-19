@@ -1,51 +1,42 @@
-from bottle import Bottle, run, view, static_file, request, redirect
+from flask import Flask, render_template, request, redirect
 from database import Database
 
-database = Database.getInstance()
-
-app = Bottle()
-
+app = Flask(__name__)
+#database = Database.getInstance()
 
 @app.route('/')
-@view('login.html')
 def login():
-    return {}
+    return render_template("login.html")
 
 @app.route('/register')
-@view('register.html')
 def register():
-    return {}
+    return render_template("register.html")
 
-@app.route('/checklogin', method='POST')
+@app.route('/checklogin', methods=['POST'])
 def checklogin():
-    username = request.forms.get('username')
-    password = request.forms.get('password')
-    realPasseword = database.getPassword(username)
+    username = request.form['username']
+    password = request.form['password']
+    #realPasseword = database.getPassword(username)
 
-    if password == realPasseword :
+    """if password == realPasseword :
         return redirect('/home')
     else :
-        return redirect('/')
+        return redirect('/')"""
 
-@app.route('/saveregister', method='POST')
+@app.route('/saveregister', methods=['POST'])
 def saveregister():
-    username = request.forms.get('username')
-    password = request.forms.get('password')
-    database.addUser(username, password)
+    username = request.form['username']
+    password = request.form['password']
+    #database.addUser(username, password)
     return redirect('/')
 
 
 @app.route('/home')
-@view('videogallery.html')
 def home():
-    return {}
+    return render_template("videogallery.html")
 
 
-@app.route('/static/<filename>')
-def send_static(filename):
-    return static_file(filename, root='./static')
 
 
-run(app, host='localhost', port=8080)
-
-
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', debug=True, threaded=True)
