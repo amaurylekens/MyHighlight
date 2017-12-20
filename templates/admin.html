@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>Ajoutez une équipe</h2>
+    <form action="/admin" method="post">
+        <div>
+            <label for="name">Nom :</label>
+            <input type="text" id="name" name="name" />
+        </div>
+        <div>
+            <button type="submit" name="addTeam" value="addTeam">Ajouter</button>
+        </div>
+    </form>
+    <h2>Ajouter une vidéo</h2>
+    <form action="/admin" method="post">
+        <div>
+            <label for="team_home">domicile :</label>
+            <select id="team_home" name="team_home">
+                {% for team in teams %}
+                    <option> {{ team }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="goals_home">But(s) :</label>
+            <input type="number" id="goals_home" name="goals_home" />
+        </div>
+        <div>
+            <label for="team_away">domicile :</label>
+            <select id="team_away" name="team_away">
+                {% for team in teams %}
+                    <option> {{ team }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="goals_away">But(s) :</label>
+            <input type="number" id="goals_away" name="goals_away" />
+        </div>
+        <div>
+            <label for="link">code youtube :</label>
+            <input type="text" id="link" name="link" />
+        </div>
+        <div>
+            <button type="submit" value="addVideo" name="addVideo">Ajouter</button>
+        </div>
+    </form>
+</body>
+</html>

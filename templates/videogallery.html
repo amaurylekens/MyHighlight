@@ -15,49 +15,116 @@
     <section class="second clearfix">
       
       <header>
-        <h1>Peut vous intérresser</h1>
+        <h1>Videos populaires</h1>
       </header>
+      {% for video in trendVideos %}
+      <article class="video">
+        <form method="post" action="/video" id="{{video['link']}}FormTrend">
+          <input type="hidden" name="link" value="{{video['link']}}">
+          <input type="hidden" name="teamHome" value="{{video['teamHome']}}">
+          <input type="hidden" name="teamAway" value="{{video['teamAway']}}">
+          <figure>
+            <a id="{{video['link']}}Trend" class="fancybox fancybox.iframe" href="#">
+            <img class="videoThumb" src="http://i1.ytimg.com/vi/{{video['link']}}/mqdefault.jpg"></a>
+          </figure>
+          <h2 class="videoTitle">{{video['teamHome']}}&nbsp;{{video['teamAway']}}&nbsp;
+            {{video['goalsHome']}}-{{video['goalsAway']}}</h2>
+        </form>
+      </article>
+      <script>
+        document.getElementById("{{video['link']}}Trend").onclick = function(){
+            var form = document.getElementById("{{video['link']}}FormTrend");
+            form.submit();
+        };
+      </script>
+      {% endfor %}
 
-      <article class="video">
-        <figure>
-        <a class="fancybox fancybox.iframe" href="//www.youtube.com/embed/0hXfF2PgeU4">
-          <img class="videoThumb" src="http://i1.ytimg.com/vi/0hXfF2PgeU4/mqdefault.jpg"></a>
-        </figure>
-        <h2 class="videoTitle">Anderlecht-Standard 1-0</h2>
-      </article>
+    </section>
 
-      <article class="video">
-        <figure>
-        <a class="fancybox fancybox.iframe" href="//www.youtube.com/embed/mIcIbaxPZ2Y">
-          <img class="videoThumb" src="http://i1.ytimg.com/vi/mIcIbaxPZ2Y/mqdefault.jpg"></a>
-        </figure>
-        <h2 class="videoTitle">Anderlecht-Ostende 3-2</h2>
-      </article>
-      
-      <article class="video">
-        <figure>
-        <a class="fancybox fancybox.iframe" href="//www.youtube.com/embed/GuRoxqkgEIU">
-          <img class="videoThumb" src="http://i1.ytimg.com/vi/GuRoxqkgEIU/mqdefault.jpg"></a>
-        </figure>
-        <h2 class="videoTitle">ManchesterU-Anderlecht 2-1</h2>
-      </article>
-      
-      <article class="video">
-        <figure>
-        <a class="fancybox fancybox.iframe" href="//www.youtube.com/embed/JrUvwgGE_2k">
-          <img class="videoThumb" src="http://i1.ytimg.com/vi/JrUvwgGE_2k/mqdefault.jpg"></a>
-        </figure>
-        <h2 class="videoTitle">Tottenham-RealM 3-1</h2>
-      </article>
-      
-      <article class="video">
-        <figure>
-        <a class="fancybox fancybox.iframe" href="//www.youtube.com/embed/HDY49xODybY">
-          <img class="videoThumb" src="http://i1.ytimg.com/vi/HDY49xODybY/mqdefault.jpg"></a>
-        </figure>
-        <h2 class="videoTitle">RealM-Barcelona 2-3</h2>
-      </article>
+    <section class="second clearfix">
 
+      <header>
+        <h1>Videos suivantes ?</h1>
+      </header>
+      {% for video in nextVideos %}
+      <article class="video">
+        <form method="post" action="/video" id="{{video['link']}}FormNext">
+          <input type="hidden" name="link" value="{{video['link']}}">
+          <input type="hidden" name="teamHome" value="{{video['teamHome']}}">
+          <input type="hidden" name="teamAway" value="{{video['teamAway']}}">
+          <figure>
+            <a id="{{video['link']}}Next" class="fancybox fancybox.iframe" href="#">
+            <img class="videoThumb" src="http://i1.ytimg.com/vi/{{video['link']}}/mqdefault.jpg"></a>
+          </figure>
+          <h2 class="videoTitle">{{video['teamHome']}}&nbsp;{{video['teamAway']}}&nbsp;
+            {{video['goalsHome']}}-{{video['goalsAway']}}</h2>
+        </form>
+      </article>
+      <script>
+        document.getElementById("{{video['link']}}Next").onclick = function(){
+            var form = document.getElementById("{{video['link']}}FormTNext");
+            form.submit();
+        };
+      </script>
+      {% endfor %}
+
+    </section>
+
+    <section class="second clearfix">
+
+      <header>
+        <h1>Votre équipe </h1>
+      </header>
+      {% for video in favoriteTeamVideos %}
+      <article class="video">
+        <form method="post" action="/video" id="{{video['link']}}FormFav">
+          <input type="hidden" name="link" value="{{video['link']}}">
+          <input type="hidden" name="teamHome" value="{{video['teamHome']}}">
+          <input type="hidden" name="teamAway" value="{{video['teamAway']}}">
+          <figure>
+            <a id="{{video['link']}}Fav" class="fancybox fancybox.iframe" href="#">
+            <img class="videoThumb" src="http://i1.ytimg.com/vi/{{video['link']}}/mqdefault.jpg"></a>
+          </figure>
+          <h2 class="videoTitle">{{video['teamHome']}}&nbsp;{{video['teamAway']}}&nbsp;
+            {{video['goalsHome']}}-{{video['goalsAway']}}</h2>
+        </form>
+      </article>
+      <script>
+        document.getElementById("{{video['link']}}Fav").onclick = function(){
+            var form = document.getElementById("{{video['link']}}FormFav");
+            form.submit();
+        };
+      </script>
+      {% endfor %}
+
+    </section>
+
+    <section class="second clearfix">
+
+      <header>
+        <h1>Toutes nos vidéos</h1>
+      </header>
+      {% for video in allVideos %}
+      <article class="video">
+        <form method="post" action="/video" id="{{video['link']}}FormAll">
+          <input type="hidden" name="link" value="{{video['link']}}">
+          <input type="hidden" name="teamHome" value="{{video['teamHome']}}">
+          <input type="hidden" name="teamAway" value="{{video['teamAway']}}">
+          <figure>
+            <a id="{{video['link']}}All" class="fancybox fancybox.iframe" href="#">
+            <img class="videoThumb" src="http://i1.ytimg.com/vi/{{video['link']}}/mqdefault.jpg"></a>
+          </figure>
+          <h2 class="videoTitle">{{video['teamHome']}}&nbsp;{{video['teamAway']}}&nbsp;
+            {{video['goalsHome']}}-{{video['goalsAway']}}</h2>
+        </form>
+      </article>
+      <script>
+        document.getElementById("{{video['link']}}All").onclick = function(){
+            var form = document.getElementById("{{video['link']}}FormAll");
+            form.submit();
+        };
+      </script>
+      {% endfor %}
 
     </section>
 
