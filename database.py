@@ -44,10 +44,10 @@ class Database :
         teams = [homeTeam, awayTeam]
 
         #create link
-        for t in teams :
-            request = "MATCH (v:Video {link: '" + link + "'}) \
-                       MATCH (t:Team {name : '" + t + "'})     \
-                      CREATE (v) -[:CONCERNS]-> (t)"
+        for t in teams:
+            request = "MATCH (v:Video {link: '" + link + "'}) "
+            request += "MATCH (t:Team {name : '" + t + "'})"
+            request += "CREATE (v) -[:CONCERNS]-> (t)"
             session = self.__driver.session()
             session.run(request)
 
@@ -130,19 +130,25 @@ class Database :
         return videos
 
     def getTrendVideos(self):
-        dateFiveDays = (datetime(datetime.now().year, datetime.now().month, datetime.now().day)-timedelta(3)).timestamp()
+        # get all 5-day old videos
+        limitDate = (datetime(datetime.now().year, datetime.now().month, datetime.now().day)-timedelta(3)).timestamp()
         request =  "MATCH (v:Video) "
-        request += "WHERE v.date>" + str(int(dateFiveDays)) + " "
+        request += "WHERE v.date>" + str(int(limitDate)) + " "
         request += "MATCH (:User)-[w:WATCH]->(v)"
         request += "RETURN v, sum(w.number) AS n"
         session = self.__driver.session()
         result = session.run(request)
+
+        # associate the video nodes and the number of view in a tupple
         videos= []
         for video in result.records():
             videos.append((video['n'], video['v']))
+
+        # sort by number of view descending
         videos = sorted(videos, key=lambda colon: colon[0])
         videos = list(reversed(videos))
 
+        # get five video
         videosSelected = []
         try :
             for i in range(5):
@@ -160,6 +166,7 @@ class Database :
 
 
     def getNextVideos(self, teams, username):
+        # find the favorite (the team wi’th the most views of the user) team in teams
         numbersOfViews = {}
         for team in teams :
             request = "MATCH (:User {username:'" + username + "'})-[w:WATCH]->(:Team {name : '" + team + "'}) RETURN w"
@@ -167,7 +174,6 @@ class Database :
             result = session.run(request)
             w = result.single()
             numbersOfViews[team] = w['w'].properties['number']
-
         favoriteTeam = ""
         max = 0
         for team in teams :
@@ -175,17 +181,23 @@ class Database :
                 max = numbersOfViews[team]
                 favoriteTeam = team
 
+        # get all the videos of the favorite team
         request = "MATCH (v:Video)-[:CONCERNS]->(:Team {name : '" + favoriteTeam + "'}) "
         request += "MATCH (:User)-[w:WATCH]->(v) "
         request += "RETURN v, sum(w.number) AS n"
         session = self.__driver.session()
         result = session.run(request)
+
+        # associate the video nodes and the number of view in a tupple
         videos = []
         for video in result.records():
             videos.append((video['n'], video['v']))
+
+        # sort by number of view descending
         videos = sorted(videos, key=lambda colon: colon[0])
         videos = list(reversed(videos))
 
+        # get five video
         videosSelected = []
         try:
             for i in range(5):
@@ -202,28 +214,36 @@ class Database :
         return videosSelected
 
     def getFavoriteTeamVideos(self, username):
+        # get all the team and the number of time that the user watch it
         request = "MATCH (:User {username:'" + username + "'})-[w:WATCH]->(t:Team) RETURN w.number AS w, t.name AS t"
         session = self.__driver.session()
         result = session.run(request)
         favoriteTeam = ""
 
+        # find the favorite team (the most watched)
         max = 0
         for team in result.records():
             if team['w'] > max:
                 max = team['w']
                 favoriteTeam = team['t']
 
+        # get all the videos of the favorite team
         request = "MATCH (v:Video)-[:CONCERNS]->(:Team {name : '" + favoriteTeam + "'}) "
         request += "MATCH (:User)-[w:WATCH]->(v) "
         request += "RETURN v, sum(w.number) AS n"
         session = self.__driver.session()
         result = session.run(request)
+
+        # associate the video nodes and the number of view in a tupple
         videos = []
         for video in result.records():
             videos.append((video['n'], video['v']))
+
+        # sort by number of view descending
         videos = sorted(videos, key=lambda colon: colon[0])
         videos = list(reversed(videos))
 
+        # get five video
         videosSelected = []
         try:
             for i in range(5):
